@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sword, Shield, Zap, Heart, Plus, RotateCcw } from 'lucide-react';
+import { BookOpen, Focus, Clock, Activity, Plus, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface Skill {
@@ -25,39 +25,39 @@ export const SkillPanel: React.FC<SkillPanelProps> = ({
 }) => {
   const [skills, setSkills] = useState<Skill[]>([
     {
-      id: 'strength',
-      name: 'Strength',
-      level: 15,
-      maxLevel: 99,
-      icon: <Sword className="w-6 h-6" />,
-      description: 'Increases physical attack power and carrying capacity',
-      color: 'text-red-400'
-    },
-    {
-      id: 'defense',
-      name: 'Defense',
-      level: 12,
-      maxLevel: 99,
-      icon: <Shield className="w-6 h-6" />,
-      description: 'Reduces incoming damage and improves resistance',
+      id: 'academic',
+      name: 'Academic Performance',
+      level: 1,
+      maxLevel: 100,
+      icon: <BookOpen className="w-6 h-6" />,
+      description: 'Improves study efficiency and academic understanding',
       color: 'text-blue-400'
     },
     {
-      id: 'agility',
-      name: 'Agility',
-      level: 18,
-      maxLevel: 99,
-      icon: <Zap className="w-6 h-6" />,
-      description: 'Increases movement speed and critical hit rate',
+      id: 'focus',
+      name: 'Focus & Concentration',
+      level: 1,
+      maxLevel: 100,
+      icon: <Focus className="w-6 h-6" />,
+      description: 'Enhances attention span and mental clarity',
+      color: 'text-purple-400'
+    },
+    {
+      id: 'timemanagement',
+      name: 'Time Management',
+      level: 1,
+      maxLevel: 100,
+      icon: <Clock className="w-6 h-6" />,
+      description: 'Increases productivity and task completion rate',
       color: 'text-yellow-400'
     },
     {
-      id: 'vitality',
-      name: 'Vitality',
-      level: 14,
-      maxLevel: 99,
-      icon: <Heart className="w-6 h-6" />,
-      description: 'Improves health points and natural regeneration',
+      id: 'health',
+      name: 'Physical Health',
+      level: 1,
+      maxLevel: 100,
+      icon: <Activity className="w-6 h-6" />,
+      description: 'Improves physical fitness and energy levels',
       color: 'text-green-400'
     }
   ]);
@@ -87,9 +87,9 @@ export const SkillPanel: React.FC<SkillPanelProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-orbitron font-bold neon-text">Skill Enhancement</h2>
+          <h2 className="text-xl font-orbitron font-bold neon-text">Student Development</h2>
           <p className="text-sm text-muted-foreground">
-            Available Points: <span className="text-primary font-bold">{availablePoints}</span>
+            Skill Points: <span className="text-primary font-bold">{availablePoints}</span>
           </p>
         </div>
         <Button
@@ -159,15 +159,15 @@ export const SkillPanel: React.FC<SkillPanelProps> = ({
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div className="text-center">
                   <div className={`font-bold ${skill.color}`}>
-                    +{skill.level * 2}
+                    +{skill.level * 5}%
                   </div>
-                  <div className="text-muted-foreground text-xs">Base Power</div>
+                  <div className="text-muted-foreground text-xs">Performance</div>
                 </div>
                 <div className="text-center">
                   <div className={`font-bold ${skill.color}`}>
-                    +{Math.floor(skill.level * 1.5)}%
+                    +{Math.floor(skill.level * 2)}
                   </div>
-                  <div className="text-muted-foreground text-xs">Efficiency</div>
+                  <div className="text-muted-foreground text-xs">Skill Points</div>
                 </div>
               </div>
             </div>
@@ -182,12 +182,12 @@ export const SkillPanel: React.FC<SkillPanelProps> = ({
 
       {/* Total Stats Summary */}
       <div className="mt-6 p-4 rounded-lg bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/30">
-        <h3 className="font-orbitron font-bold text-center mb-3 neon-text">Total Power Level</h3>
+        <h3 className="font-orbitron font-bold text-center mb-3 neon-text">Student Level</h3>
         <div className="text-center">
           <div className="text-4xl font-orbitron font-bold neon-accent mb-2">
             {skills.reduce((sum, skill) => sum + skill.level, 0)}
           </div>
-          <div className="text-sm text-muted-foreground">Combined Level</div>
+          <div className="text-sm text-muted-foreground">Total Development</div>
         </div>
       </div>
     </div>

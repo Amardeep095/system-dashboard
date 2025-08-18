@@ -1,58 +1,300 @@
 import React, { useState } from 'react';
-import { Beef, Plus, RotateCcw, TrendingUp } from 'lucide-react';
+import { Utensils, Plus, RotateCcw, TrendingUp, Calendar, ChefHat } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-interface ProteinEntry {
+interface MealEntry {
   id: string;
-  source: string;
-  amount: number;
+  mealType: string;
+  items: string[];
+  calories: number;
+  protein: number;
   time: string;
 }
 
+interface DayPlan {
+  day: number;
+  title: string;
+  meals: {
+    breakfast: { items: string[]; calories: number; protein: number };
+    snack1: { items: string[]; calories: number; protein: number };
+    lunch: { items: string[]; calories: number; protein: number };
+    snack2: { items: string[]; calories: number; protein: number };
+    dinner?: { items: string[]; calories: number; protein: number };
+  };
+  totalCalories: number;
+  totalProtein: number;
+}
+
+const weeklyPlan: DayPlan[] = [
+  {
+    day: 1,
+    title: "Overnight Oats + Chicken",
+    meals: {
+      breakfast: { 
+        items: ["Overnight oats (150mL milk, 60g oats, 1 banana, 1 scoop whey)"], 
+        calories: 450, 
+        protein: 30 
+      },
+      snack1: { 
+        items: ["5 boiled eggs"], 
+        calories: 350, 
+        protein: 30 
+      },
+      lunch: { 
+        items: ["150g grilled chicken", "1 cup rice", "sautéed veggies"], 
+        calories: 500, 
+        protein: 40 
+      },
+      snack2: { 
+        items: ["2 slices brown bread", "1 tsp peanut butter"], 
+        calories: 250, 
+        protein: 8 
+      }
+    },
+    totalCalories: 1550,
+    totalProtein: 108
+  },
+  {
+    day: 2,
+    title: "Shake + Paneer",
+    meals: {
+      breakfast: { 
+        items: ["Banana shake (150mL milk, 60g oats, 1 banana, 1 scoop whey)"], 
+        calories: 450, 
+        protein: 30 
+      },
+      snack1: { 
+        items: ["5 boiled eggs"], 
+        calories: 350, 
+        protein: 30 
+      },
+      lunch: { 
+        items: ["150g paneer", "2 chapatis or 1 cup rice", "mixed vegetables"], 
+        calories: 500, 
+        protein: 35 
+      },
+      snack2: { 
+        items: ["2 slices brown bread", "peanut butter", "pineapple slice"], 
+        calories: 270, 
+        protein: 10 
+      }
+    },
+    totalCalories: 1570,
+    totalProtein: 105
+  },
+  {
+    day: 3,
+    title: "Overnight Oats + Chicken",
+    meals: {
+      breakfast: { 
+        items: ["Overnight oats"], 
+        calories: 450, 
+        protein: 30 
+      },
+      snack1: { 
+        items: ["5 boiled eggs"], 
+        calories: 350, 
+        protein: 30 
+      },
+      lunch: { 
+        items: ["150g grilled chicken", "2 chapatis", "sautéed spinach"], 
+        calories: 500, 
+        protein: 40 
+      },
+      snack2: { 
+        items: [], 
+        calories: 0, 
+        protein: 0 
+      },
+      dinner: { 
+        items: ["Steamed broccoli", "cucumber salad", "optional 2 boiled eggs"], 
+        calories: 250, 
+        protein: 20 
+      }
+    },
+    totalCalories: 1550,
+    totalProtein: 120
+  },
+  {
+    day: 4,
+    title: "Shake + Paneer",
+    meals: {
+      breakfast: { 
+        items: ["Banana shake"], 
+        calories: 450, 
+        protein: 30 
+      },
+      snack1: { 
+        items: ["5 eggs (boiled or omelette)"], 
+        calories: 350, 
+        protein: 30 
+      },
+      lunch: { 
+        items: ["150g paneer", "1 cup brown rice", "sautéed vegetables"], 
+        calories: 500, 
+        protein: 35 
+      },
+      snack2: { 
+        items: ["2 slices brown bread", "peanut butter"], 
+        calories: 250, 
+        protein: 8 
+      }
+    },
+    totalCalories: 1550,
+    totalProtein: 103
+  },
+  {
+    day: 5,
+    title: "Overnight Oats + Chicken",
+    meals: {
+      breakfast: { 
+        items: ["Overnight oats"], 
+        calories: 450, 
+        protein: 30 
+      },
+      snack1: { 
+        items: ["5 boiled eggs"], 
+        calories: 350, 
+        protein: 30 
+      },
+      lunch: { 
+        items: ["150g grilled chicken", "1 cup rice", "sautéed veggies"], 
+        calories: 500, 
+        protein: 40 
+      },
+      snack2: { 
+        items: ["2 slices brown bread", "1 tsp peanut butter"], 
+        calories: 250, 
+        protein: 8 
+      }
+    },
+    totalCalories: 1550,
+    totalProtein: 108
+  },
+  {
+    day: 6,
+    title: "Shake + Paneer",
+    meals: {
+      breakfast: { 
+        items: ["Banana shake"], 
+        calories: 450, 
+        protein: 30 
+      },
+      snack1: { 
+        items: ["5 boiled eggs"], 
+        calories: 350, 
+        protein: 30 
+      },
+      lunch: { 
+        items: ["150g paneer", "2 chapatis or 1 cup rice", "mixed vegetables"], 
+        calories: 500, 
+        protein: 35 
+      },
+      snack2: { 
+        items: ["2 slices brown bread", "peanut butter"], 
+        calories: 250, 
+        protein: 8 
+      }
+    },
+    totalCalories: 1550,
+    totalProtein: 103
+  },
+  {
+    day: 7,
+    title: "Flex Day (Egg Focused)",
+    meals: {
+      breakfast: { 
+        items: ["5 eggs (omelette)", "2 slices brown bread"], 
+        calories: 400, 
+        protein: 30 
+      },
+      snack1: { 
+        items: [], 
+        calories: 0, 
+        protein: 0 
+      },
+      lunch: { 
+        items: ["150g chicken", "1 cup rice or 2 chapatis", "mixed veggies"], 
+        calories: 500, 
+        protein: 40 
+      },
+      snack2: { 
+        items: ["Brown bread + peanut butter"], 
+        calories: 250, 
+        protein: 8 
+      },
+      dinner: { 
+        items: ["Salad"], 
+        calories: 150, 
+        protein: 5 
+      }
+    },
+    totalCalories: 1300,
+    totalProtein: 83
+  }
+];
+
 export const ProteinTracker: React.FC = () => {
-  const [entries, setEntries] = useState<ProteinEntry[]>([
-    { id: '1', source: 'Chicken Breast', amount: 35, time: '08:30' },
-    { id: '2', source: 'Protein Shake', amount: 25, time: '10:15' },
-  ]);
-  const [source, setSource] = useState('');
-  const [amount, setAmount] = useState('');
-  const [isAdding, setIsAdding] = useState(false);
+  const [selectedDay, setSelectedDay] = useState<number>(1);
+  const [consumedMeals, setConsumedMeals] = useState<Set<string>>(new Set());
+  const [customEntries, setCustomEntries] = useState<MealEntry[]>([]);
 
-  const dailyGoal = 150; // grams
-  const currentTotal = entries.reduce((sum, entry) => sum + entry.amount, 0);
-  const progressPercentage = Math.min((currentTotal / dailyGoal) * 100, 100);
+  const currentPlan = weeklyPlan.find(plan => plan.day === selectedDay) || weeklyPlan[0];
+  
+  const getConsumedCalories = () => {
+    let calories = 0;
+    Object.entries(currentPlan.meals).forEach(([mealType, meal]) => {
+      if (consumedMeals.has(`${selectedDay}-${mealType}`)) {
+        calories += meal.calories;
+      }
+    });
+    return calories + customEntries.reduce((sum, entry) => sum + entry.calories, 0);
+  };
 
-  const addEntry = () => {
-    if (source.trim() && amount.trim()) {
-      const entry: ProteinEntry = {
-        id: Date.now().toString(),
-        source: source.trim(),
-        amount: parseInt(amount),
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-      setEntries([...entries, entry]);
-      setSource('');
-      setAmount('');
-      setIsAdding(false);
+  const getConsumedProtein = () => {
+    let protein = 0;
+    Object.entries(currentPlan.meals).forEach(([mealType, meal]) => {
+      if (consumedMeals.has(`${selectedDay}-${mealType}`)) {
+        protein += meal.protein;
+      }
+    });
+    return protein + customEntries.reduce((sum, entry) => sum + entry.protein, 0);
+  };
+
+  const toggleMeal = (mealType: string) => {
+    const mealId = `${selectedDay}-${mealType}`;
+    const newConsumedMeals = new Set(consumedMeals);
+    if (newConsumedMeals.has(mealId)) {
+      newConsumedMeals.delete(mealId);
+    } else {
+      newConsumedMeals.add(mealId);
     }
+    setConsumedMeals(newConsumedMeals);
   };
 
   const resetTracker = () => {
-    setEntries([]);
+    setConsumedMeals(new Set());
+    setCustomEntries([]);
   };
+
+  const currentCalories = getConsumedCalories();
+  const currentProtein = getConsumedProtein();
+  const calorieProgress = Math.min((currentCalories / currentPlan.totalCalories) * 100, 100);
+  const proteinProgress = Math.min((currentProtein / currentPlan.totalProtein) * 100, 100);
 
   return (
     <div className="system-panel p-6 animate-slide-in-up animate-delay-200">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-lg bg-red-500/20 border border-red-500/50 flex items-center justify-center">
-            <Beef className="w-6 h-6 text-red-400" />
+          <div className="w-12 h-12 rounded-lg bg-green-500/20 border border-green-500/50 flex items-center justify-center">
+            <Utensils className="w-6 h-6 text-green-400" />
           </div>
           <div>
-            <h2 className="text-xl font-orbitron font-bold neon-text">Protein Intake</h2>
-            <p className="text-sm text-muted-foreground">Daily nutrition tracking</p>
+            <h2 className="text-xl font-orbitron font-bold neon-text">Diet Management</h2>
+            <p className="text-sm text-muted-foreground">Weekly nutrition plan</p>
           </div>
         </div>
         <Button
@@ -66,108 +308,120 @@ export const ProteinTracker: React.FC = () => {
         </Button>
       </div>
 
+      {/* Day Selection */}
+      <div className="mb-6">
+        <Select value={selectedDay.toString()} onValueChange={(value) => setSelectedDay(parseInt(value))}>
+          <SelectTrigger className="system-btn">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {weeklyPlan.map((plan) => (
+              <SelectItem key={plan.day} value={plan.day.toString()}>
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4" />
+                  Day {plan.day}: {plan.title}
+                </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
       {/* Progress Display */}
-      <div className="text-center mb-6">
-        <div className="text-4xl font-orbitron font-bold neon-accent mb-2">
-          {currentTotal}g
-        </div>
-        <div className="text-sm text-muted-foreground mb-4">of {dailyGoal}g daily goal</div>
-        
-        <div className="progress-glow h-4 mb-2">
-          <div 
-            className="progress-fill bg-health transition-all duration-700" 
-            style={{ width: `${progressPercentage}%` }}
-          />
-        </div>
-        
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">0g</span>
-          <span className={currentTotal >= dailyGoal ? 'text-success' : 'text-primary'}>
-            {Math.round(progressPercentage)}% Complete
-          </span>
-          <span className="text-muted-foreground">{dailyGoal}g</span>
-        </div>
-      </div>
-
-      {/* Entries List */}
-      <div className="space-y-2 mb-4 max-h-32 overflow-y-auto">
-        {entries.map((entry, index) => (
-          <div 
-            key={entry.id} 
-            className="flex justify-between items-center p-3 rounded-lg bg-background/30 border border-border/50"
-            style={{ animationDelay: `${index * 0.1}s` }}
-          >
-            <div>
-              <div className="font-medium text-foreground">{entry.source}</div>
-              <div className="text-sm text-muted-foreground">{entry.time}</div>
-            </div>
-            <div className="font-bold text-primary">{entry.amount}g</div>
+      <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="text-center">
+          <div className="text-2xl font-orbitron font-bold neon-accent mb-1">
+            {currentCalories}
           </div>
-        ))}
-        
-        {entries.length === 0 && (
-          <div className="text-center py-8 text-muted-foreground">
-            No protein entries yet today
-          </div>
-        )}
-      </div>
-
-      {/* Add Entry Form */}
-      {isAdding ? (
-        <div className="system-panel p-4 border-2 border-primary/50 space-y-3">
-          <Input
-            value={source}
-            onChange={(e) => setSource(e.target.value)}
-            placeholder="Protein source (e.g., Chicken, Eggs, Shake)"
-            className="bg-background/50 border-border"
-          />
-          <div className="flex gap-2">
-            <Input
-              type="number"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              placeholder="Amount (g)"
-              className="flex-1 bg-background/50 border-border"
-              min="0"
+          <div className="text-xs text-muted-foreground mb-2">/ {currentPlan.totalCalories} kcal</div>
+          <div className="progress-glow h-2">
+            <div 
+              className="progress-fill bg-primary transition-all duration-700" 
+              style={{ width: `${calorieProgress}%` }}
             />
-            <Button onClick={addEntry} className="system-btn">
-              Add
-            </Button>
-            <Button 
-              onClick={() => setIsAdding(false)} 
-              variant="outline" 
-              className="system-btn"
-            >
-              Cancel
-            </Button>
           </div>
         </div>
-      ) : (
-        <Button
-          onClick={() => setIsAdding(true)}
-          className="w-full system-btn"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Add Protein
-        </Button>
-      )}
+        <div className="text-center">
+          <div className="text-2xl font-orbitron font-bold neon-accent mb-1">
+            {currentProtein}g
+          </div>
+          <div className="text-xs text-muted-foreground mb-2">/ {currentPlan.totalProtein}g protein</div>
+          <div className="progress-glow h-2">
+            <div 
+              className="progress-fill bg-health transition-all duration-700" 
+              style={{ width: `${proteinProgress}%` }}
+            />
+          </div>
+        </div>
+      </div>
 
-      {/* Stats */}
+      {/* Meal Plan */}
+      <div className="space-y-3 max-h-64 overflow-y-auto">
+        {Object.entries(currentPlan.meals).map(([mealType, meal]) => {
+          if (meal.items.length === 0) return null;
+          
+          const mealId = `${selectedDay}-${mealType}`;
+          const isConsumed = consumedMeals.has(mealId);
+          
+          return (
+            <div 
+              key={mealType}
+              className={`p-3 rounded-lg border transition-all duration-300 cursor-pointer ${
+                isConsumed 
+                  ? 'bg-success/20 border-success/50' 
+                  : 'bg-background/30 border-border/50 hover:border-primary/50'
+              }`}
+              onClick={() => toggleMeal(mealType)}
+            >
+              <div className="flex justify-between items-start mb-2">
+                <div className="flex items-center gap-2">
+                  <ChefHat className="w-4 h-4 text-primary" />
+                  <h4 className="font-medium capitalize text-foreground">
+                    {mealType === 'snack1' ? 'Morning Snack' : 
+                     mealType === 'snack2' ? 'Pre-workout Snack' : mealType}
+                  </h4>
+                  {isConsumed && <div className="w-2 h-2 bg-success rounded-full" />}
+                </div>
+                <div className="text-right text-sm">
+                  <div className="text-primary font-bold">{meal.calories} kcal</div>
+                  <div className="text-accent">{meal.protein}g protein</div>
+                </div>
+              </div>
+              <div className="text-sm text-muted-foreground">
+                {meal.items.join(' • ')}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Daily Summary */}
       <div className="mt-6 p-4 rounded-lg bg-background/20 border border-border/30">
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
           <TrendingUp className="w-4 h-4" />
-          Today's Stats
+          Day {selectedDay} Progress
         </div>
-        <div className="grid grid-cols-2 gap-4 text-center">
+        <div className="grid grid-cols-3 gap-4 text-center text-sm">
           <div>
-            <div className="font-orbitron font-bold text-primary">{entries.length}</div>
-            <div className="text-xs text-muted-foreground">Meals</div>
+            <div className="font-orbitron font-bold text-primary">
+              {Math.round(calorieProgress)}%
+            </div>
+            <div className="text-xs text-muted-foreground">Calories</div>
           </div>
           <div>
             <div className="font-orbitron font-bold text-accent">
-              {entries.length ? Math.round(currentTotal / entries.length) : 0}g
+              {Math.round(proteinProgress)}%
             </div>
-            <div className="text-xs text-muted-foreground">Avg/Meal</div>
+            <div className="text-xs text-muted-foreground">Protein</div>
+          </div>
+          <div>
+            <div className="font-orbitron font-bold text-success">
+              {Object.keys(currentPlan.meals).filter(meal => 
+                currentPlan.meals[meal as keyof typeof currentPlan.meals].items.length > 0 &&
+                consumedMeals.has(`${selectedDay}-${meal}`)
+              ).length}
+            </div>
+            <div className="text-xs text-muted-foreground">Meals</div>
           </div>
         </div>
       </div>

@@ -22,17 +22,17 @@ const Index = () => {
   
   // User stats state
   const [userStats, setUserStats] = useState({
-    level: 42,
-    xp: 2847,
-    maxXp: 3500,
-    health: 850,
-    maxHealth: 1000,
-    mana: 420,
-    maxMana: 600,
-    strength: 85,
-    agility: 78,
-    intelligence: 92,
-    vitality: 81
+    level: 0,
+    xp: 0,
+    maxXp: 1000,
+    health: 100,
+    maxHealth: 100,
+    mana: 50,
+    maxMana: 50,
+    strength: 1,
+    agility: 1,
+    intelligence: 1,
+    vitality: 1
   });
   
   const [availableSkillPoints, setAvailableSkillPoints] = useState(5);
@@ -137,7 +137,7 @@ const Index = () => {
           <div className="xl:col-span-8">
             <SystemDashboard 
               userStats={userStats} 
-              userName="Hunter"
+              userName="Prince"
             />
           </div>
           

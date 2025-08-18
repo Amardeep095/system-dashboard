@@ -7,6 +7,8 @@ import { ProteinTracker } from '@/components/ProteinTracker';
 import { WaterTracker } from '@/components/WaterTracker';
 import { WorkoutTracker } from '@/components/WorkoutTracker';
 import { SystemNotification } from '@/components/SystemNotification';
+import { SkillTree } from '@/components/SkillTree';
+import { QuestManager } from '@/components/QuestManager';
 import { useToast } from '@/hooks/use-toast';
 
 interface Notification {
@@ -157,6 +159,14 @@ const Index = () => {
           <ProteinTracker />
           <WaterTracker />
           <WorkoutTracker />
+        </div>
+
+        {/* Interactive Systems Grid */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
+          <div className="system-panel p-6">
+            <SkillTree />
+          </div>
+          <QuestManager />
         </div>
 
         {/* System Status Footer */}

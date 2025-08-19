@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ParticleBackground } from '@/components/ParticleBackground';
 import { SystemDashboard } from '@/components/SystemDashboard';
 import { SkillPanel } from '@/components/SkillPanel';
@@ -21,6 +22,21 @@ interface Notification {
 
 const Index = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const [userName, setUserName] = useState('Prince');
+
+  // Check authentication on component mount
+  useEffect(() => {
+    const storedUsername = localStorage.getItem('systemUsername');
+    const questAccepted = localStorage.getItem('questAccepted');
+    
+    if (!storedUsername || !questAccepted) {
+      navigate('/');
+      return;
+    }
+    
+    setUserName(storedUsername);
+  }, [navigate]);
   
   // User stats state
   const [userStats, setUserStats] = useState({
@@ -139,7 +155,7 @@ const Index = () => {
           <div className="xl:col-span-8">
             <SystemDashboard 
               userStats={userStats} 
-              userName="Prince"
+              userName={userName}
             />
           </div>
           
